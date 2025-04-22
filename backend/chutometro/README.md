@@ -35,9 +35,9 @@ Esta é uma API Spring Boot para gerenciamento de jogos e times do Campeonato Br
 1. Clone o repositório
 2. Execute o comando
 
-``
+```
 mvn spring-boot:run
 
-``
+```
 A API estará disponível em http://localhost:6969
 
