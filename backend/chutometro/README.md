@@ -1,8 +1,57 @@
+
 # API Chutômetro - Brasileirão
 Esta é uma API Spring Boot para gerenciamento de jogos e times do Campeonato Brasileiro (Brasileirão), chamada "Chutômetro".
 
 ## Endpoints
-### Jogos `(/api/games)`
+
+### Autenticação (`/api/auth`)
+
+#### Login (`/api/auth/login`)
+
+| Método | Endpoint              | Descrição                |
+|--------|-----------------------|--------------------------|
+| POST   | /api/auth/login        | Realiza o login do usuário e retorna um token de autenticação |
+
+**Exemplo de requisição (POST)**
+```json
+{
+  "email": "usuario@example.com",
+  "password": "senha123"
+}
+```
+
+**Exemplo de resposta**
+```json
+{
+  "name": "Nome do Usuário",
+  "token": "token_de_autenticacao_aqui"
+}
+```
+
+#### Registro (`/api/auth/register`)
+
+| Método | Endpoint              | Descrição                |
+|--------|-----------------------|--------------------------|
+| POST   | /api/auth/register     | Realiza o cadastro de um novo usuário e retorna um token de autenticação |
+
+**Exemplo de requisição (POST)**
+```json
+{
+  "email": "usuario@example.com",
+  "password": "senha123",
+  "name": "Nome do Usuário"
+}
+```
+
+**Exemplo de resposta**
+```json
+{
+  "name": "Nome do Usuário",
+  "token": "token_de_autenticacao_aqui"
+}
+```
+
+### Jogos (`/api/games`)
 
 | Método | Endpoint            | Descrição               |
 |--------|---------------------|--------------------------|
@@ -11,7 +60,8 @@ Esta é uma API Spring Boot para gerenciamento de jogos e times do Campeonato Br
 | POST   | /api/games          | Cria um novo jogo        |
 | PUT    | /api/games/{id}     | Atualiza um jogo         |
 | DELETE | /api/games/{id}     | Remove um jogo           |
-### Times (/api/team)
+
+### Times (`/api/team`)
 
 | Método | Endpoint                            | Descrição                            |
 |--------|-------------------------------------|----------------------------------------|
@@ -37,7 +87,6 @@ Esta é uma API Spring Boot para gerenciamento de jogos e times do Campeonato Br
 
 ```
 mvn spring-boot:run
-
 ```
-A API estará disponível em http://localhost:6969
 
+A API estará disponível em `http://localhost:6969`
