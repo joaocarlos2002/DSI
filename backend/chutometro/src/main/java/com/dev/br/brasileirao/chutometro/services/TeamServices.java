@@ -37,11 +37,11 @@ public class TeamServices {
         try {
             team.setId(null);
             team = this.teamRepository.save(team);
-
+            return this.teamRepository.save(team);
         } catch (RuntimeException e) {
             e.printStackTrace();
+            throw e;
         }
-        return team;
     }
 
 

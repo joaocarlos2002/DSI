@@ -2,6 +2,11 @@ server:
   port: 6969
 
 spring:
+  api:
+    security:
+      token:
+        secret: CHUT0M3T-RO
+
   application:
     name: chutometro
   output:
@@ -21,3 +26,4 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
+

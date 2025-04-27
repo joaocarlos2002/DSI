@@ -24,7 +24,7 @@ public class TeamController {
         return ResponseEntity.ok().body(team);
     }
 
-    @PostMapping
+    @PostMapping("/create")
     @Validated
     public ResponseEntity<Void> create(@RequestBody Team team) {
         this.teamServices.createTeam(team);

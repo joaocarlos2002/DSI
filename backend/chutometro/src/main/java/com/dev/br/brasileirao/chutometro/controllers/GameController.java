@@ -33,7 +33,7 @@ public class GameController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @PostMapping
+    @PostMapping("/create")
     public ResponseEntity<Games> create(@RequestBody Games game) {
         Games createdGame = gameServices.create(game);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest()

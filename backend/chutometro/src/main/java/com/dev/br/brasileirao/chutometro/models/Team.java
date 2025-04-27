@@ -14,10 +14,10 @@ public class Team {
     @Column(name = "id", unique = true)
     private Long id;
 
-        @Column(name = "team_name", length = 100, nullable = false, unique = true)
+    @Column(name = "team_name", length = 100, nullable = false, unique = true)
     private String teamName;
 
-    @Column(name = "avatar_link", nullable = false)
+    @Column(name = "avatar_link")
     private String avatar;
 
     @Column(name = "total_games")
