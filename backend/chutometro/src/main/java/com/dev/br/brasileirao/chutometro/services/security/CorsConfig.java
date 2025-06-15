@@ -15,8 +15,8 @@ public class CorsConfig {
                 registry.addMapping("/**") // Permite todas as rotas
                         .allowedOrigins("http://localhost:59384") // Permite o frontend
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS") // Métodos permitidos
-                        .allowedHeaders("*") // Permite todos os cabeçalhos
-                        .allowCredentials(true); // Permite envio de cookies
+                        .allowedHeaders("*")
+                        .allowCredentials(true);
             }
         };
     }

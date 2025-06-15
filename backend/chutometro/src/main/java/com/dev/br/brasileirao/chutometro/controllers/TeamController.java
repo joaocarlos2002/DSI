@@ -18,10 +18,16 @@ public class TeamController {
     @Autowired
     private TeamServices teamServices;
 
-    @GetMapping("/{id}")
+    @GetMapping("/id/{id}")
     public ResponseEntity<Team> findById(@PathVariable Long id) {
         Team team = this.teamServices.findById(id);
         return ResponseEntity.ok().body(team);
+    }
+
+    @GetMapping("/{name}")
+    public ResponseEntity<Long> findByName(@PathVariable String name) {
+        Team team = this.teamServices.findTeamByName(name);
+        return ResponseEntity.ok(team.getId());
     }
 
     @PostMapping("/create")

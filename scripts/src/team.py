@@ -1,9 +1,9 @@
-from get_the_link_of_all_shields import Shield
+from shields import Shield
 import csv
 
 class Team(Shield):
     def __init__(self, name):
-        self.DATASET_FILE_PATH = 'data/dataset/campeonato-brasileiro-full.csv'
+        self.DATASET_FILE_PATH = 'scripts\src\data\dataset\campeonato-brasileiro-full.csv'
         self.team_name = name
         self.average_of_goals = self.set_average_of_goals()
         self.total_games = self.set_total_games()
@@ -12,13 +12,10 @@ class Team(Shield):
         self.total_defeats = self.set_total_defeats()
 
         try:
-            
             self.avatar_link = Shield(name).return_shield_url()
         except Exception as e:
-            print(f"Erro ao obter o avatar link para o time {name}: {e}")
             self.avatar_link = "https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcRUREvlCvHREdbT-Xsf2L2dmgO7AulT-6hqeDRUThJvVKKQwYuPwNatanNGyJiXSwubdlC8iTQHCPxOrsM-uuUCfg"
-
-
+            print(f"Erro ao obter o avatar link para o time {name}: {e}")
 
     def open_dataset(self):
         with open(self.DATASET_FILE_PATH, mode='r', encoding='utf-8') as f:
@@ -28,9 +25,8 @@ class Team(Shield):
     def set_average_of_goals(self):
         total_goals = 0
         total_matches = self.set_total_games()
-
         base_dataset = self.open_dataset()
-
+    
         for row in base_dataset:
             if row['mandante'] == self.team_name:
                 total_goals += int(row['mandante_Placar'])

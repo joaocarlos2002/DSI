@@ -21,10 +21,22 @@ public class TeamServices {
         this.teamRepository = teamRepository;
     }
 
+    @Transactional
+    public Team findTeamByName(String name) {
+        try {
+            Optional<Team> team = this.teamRepository.findByTeamName(name);
+            return team.orElseThrow(() -> new RuntimeException("Time não encontrado"));
+        }catch (RuntimeException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Time não encontrado", e);
+        }
+    }
+
+    @Transactional
     public Team findById(Long id) {
         try {
             Optional<Team> team = this.teamRepository.findById(id);
-            return team.orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+            return team.orElseThrow(() -> new RuntimeException("Time não encontrado"));
         } catch (RuntimeException e) {
             e.printStackTrace();
             throw new RuntimeException("Time não encontrado", e);
@@ -43,7 +55,6 @@ public class TeamServices {
             throw e;
         }
     }
-
 
     @Transactional
     public void updateAvatarTeam(Long id, String newLink) {
