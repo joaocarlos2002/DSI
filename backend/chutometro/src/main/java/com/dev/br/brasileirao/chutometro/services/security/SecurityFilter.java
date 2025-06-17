@@ -30,6 +30,8 @@ public class SecurityFilter  extends OncePerRequestFilter {
             "/api/auth/register",
             "/api/team/create",
             "/api/team/*",
+//            dps arrumar
+            "/api/games/*",
             "/api/games/create"
     );
 

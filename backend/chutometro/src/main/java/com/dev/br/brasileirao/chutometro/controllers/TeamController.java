@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/team")
@@ -24,10 +25,20 @@ public class TeamController {
         return ResponseEntity.ok().body(team);
     }
 
+    @GetMapping("/all-team")
+    public ResponseEntity<List<Team>> findAllTeams() {
+        List<Team> teams = teamServices.findAll();
+        return ResponseEntity.ok(teams);
+
+    }
     @GetMapping("/{name}")
-    public ResponseEntity<Long> findByName(@PathVariable String name) {
+    public ResponseEntity<Team> findByName(@PathVariable String name) {
         Team team = this.teamServices.findTeamByName(name);
-        return ResponseEntity.ok(team.getId());
+        if (team != null) {
+            return ResponseEntity.ok(team);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @PostMapping("/create")
