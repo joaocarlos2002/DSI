@@ -53,6 +53,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/api/team/create").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/games/create").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/team/{name}").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/games/find-by-all-games").permitAll()
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class);

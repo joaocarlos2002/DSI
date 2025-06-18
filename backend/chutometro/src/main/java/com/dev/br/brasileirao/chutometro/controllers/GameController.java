@@ -86,4 +86,10 @@ public class GameController {
             return ResponseEntity.notFound().build();
         }
     }
+
+    @GetMapping("/find-by-all-games")
+    public ResponseEntity<List<Games>> findByAllGames() {
+        List<Games> games = gameServices.findByAllGames();
+        return ResponseEntity.ok().body(games);
+    }
 }
