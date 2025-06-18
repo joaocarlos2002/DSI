@@ -38,6 +38,10 @@ public class GameServices {
         }
     }
 
+    public List<Games> findByAllGames() {
+        return gameRepository.findAll();
+    }
+
     public List<Games> findByTeamNames(String team1, String team2) {
         return gameRepository.findByTeamNames(team1, team2);
     }
@@ -88,8 +92,6 @@ public class GameServices {
         }
         gameRepository.deleteById(id);
     }
-
-
 
     private void calculateTotalGoals(Games game) {
         Integer total = 0;

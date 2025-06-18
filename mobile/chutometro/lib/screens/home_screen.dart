@@ -9,6 +9,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'team_selector.dart';
 import 'round_and_team_selector.dart';
+import 'profile_screen.dart';
 
 const Color kPrimaryColor = Color(0xFF3E5922);
 const Color kCardColor = Colors.white;
@@ -35,6 +36,18 @@ class _HomeScreenState extends State<HomeScreen> {
         backgroundColor: kBackgroundColor,
         elevation: 0, 
         actions: [
+          IconButton(
+            icon: const Icon(Icons.account_circle),
+            tooltip: 'Perfil',
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const ProfileScreen(),
+                ),
+              );
+            },
+          ),
           IconButton(
             icon: const Icon(Icons.logout),
             onPressed: () async {
@@ -112,7 +125,41 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ),
                   const SizedBox(height: 32),
-                  // Card para cadastrar novo jogo da rodada 1 de 2025
+
+                  // Botão para ir para a tela de filtro de jogos
+                  Center(
+                    child: ElevatedButton.icon(
+                      icon: const Icon(Icons.filter_alt, color: Colors.white),
+                      label: const Text(
+                        'Filtrar Jogos',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                          color: Colors.white,
+                          letterSpacing: 0.5,
+                        ),
+                      ),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: kPrimaryColor,
+                        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                        elevation: 4,
+                        shadowColor: kPrimaryColor.withOpacity(0.3),
+                      ),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const JogosFiltroScreen(),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                  const SizedBox(height: 32),
+
                   Card(
                     color: kCardColor,
                     shape: RoundedRectangleBorder(
@@ -139,7 +186,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             ],
                           ),
                           const SizedBox(height: 16),
-                          // Campos do novo jogo
+    
                           _NovoJogoForm(),
                         ],
                       ),
