@@ -7,6 +7,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -32,6 +33,11 @@ public class TeamServices {
         }
     }
 
+    @Transactional()
+    public List<Team> findAll() {
+        return teamRepository.findAll();
+    }
+
     @Transactional
     public Team findById(Long id) {
         try {
@@ -43,7 +49,6 @@ public class TeamServices {
         }
     }
 
-    // precisa tratar, caso não passe alguma coluna da tabela, depois tu faz isso guilherme
     @Transactional
     public Team createTeam(Team team) {
         try {

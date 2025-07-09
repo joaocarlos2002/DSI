@@ -14,3 +14,5 @@ class Shield:
         if not self.verify_status_code():
             return print(f"Logo not found for {self.name}.")
         return self.BASE_URL
+    
+    

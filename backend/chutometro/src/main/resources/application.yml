@@ -1,6 +1,10 @@
 server:
   port: 6969
 
+ml:
+  api:
+    url: http://localhost:1111/predict_teams
+
 spring:
   api:
     security:

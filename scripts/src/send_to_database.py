@@ -3,6 +3,7 @@ import requests
 from team import Team
 from get_all_teams import get_all_teams
 from get_all_games import get_all_games
+import os
 
 dotenv.load_dotenv()
 
@@ -104,11 +105,34 @@ def send_all_games_to_database():
     except Exception as e:
         print(f"Erro ao enviar os jogos para a API: {e}")
 
-if __name__ == "__main__":
+def download_team_logo(team_name, save_path):
+    try:
+        team = Team(team_name)
+        logo_url = team.avatar_link
+        if not logo_url:
+            print(f"Time '{team_name}' não possui logo.")
+            return
+
+        # Cria o diretório se não existir
+        dir_path = os.path.dirname(save_path)
+        if dir_path and not os.path.exists(dir_path):
+            os.makedirs(dir_path, exist_ok=True)
+
+        response = requests.get(logo_url, stream=True)
+        if response.status_code == 200:
+            with open(save_path, "wb") as f:
+                for chunk in response.iter_content(1024):
+                    f.write(chunk)
+            print(f"Logo do time '{team_name}' baixado com sucesso em '{save_path}'.")
+        else:
+            print(f"Falha ao baixar logo do time '{team_name}'. Status code: {response.status_code}")
+    except Exception as e:
+        print(f"Erro ao baixar logo do time '{team_name}': {e}")
+
+# if __name__ == "__main__":
     # send_all_games_to_database()
     # all_teams = get_all_teams()
 
     # for team in all_teams:
-    #     send_team_to_database(team)
-    ...
-
+    #     time_formatado = team.replace(" ", "-").lower()
+    #     download_team_logo(time_formatado, f"logos/{time_formatado}.png")

@@ -1,11 +1,13 @@
 package com.dev.br.brasileirao.chutometro.services;
 
 import com.dev.br.brasileirao.chutometro.models.Games;
+import com.dev.br.brasileirao.chutometro.models.Team;
 import com.dev.br.brasileirao.chutometro.repositories.GameRepository;
 import com.dev.br.brasileirao.chutometro.repositories.TeamRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,6 +28,29 @@ public class GameServices {
         validateTeams(game);
         calculateTotalGoals(game);
         return gameRepository.save(game);
+    }
+
+    public List<Games> findAllByRoundAndDate(Integer round, String data) {
+        if (data != null) {
+            return gameRepository.findByRoundAndData(round, data);
+        } else {
+            return gameRepository.findByRound(round);
+        }
+    }
+
+    public List<Games> findByAllGames() {
+        return gameRepository.findAll();
+    }
+
+    public List<Games> findByTeamNames(String team1, String team2) {
+        return gameRepository.findByTeamNames(team1, team2);
+    }
+
+    public List<Games> findByRoundAndYear(Integer round, String ano) {
+        if (ano != null && !ano.isBlank()) {
+            return gameRepository.findByRoundAndDataStartingWith(round, ano);
+        }
+        return gameRepository.findByRound(round);
     }
 
     public List<Games> findAll() {

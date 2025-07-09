@@ -7,6 +7,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -19,7 +20,8 @@ import java.util.Collections;
 import java.util.List;
 
 @Component
-public class SecurityFilter  extends OncePerRequestFilter {
+@Order(2)
+public class SecurityFilter extends OncePerRequestFilter {
     @Autowired
     TokenService tokenService;
     @Autowired
@@ -30,7 +32,15 @@ public class SecurityFilter  extends OncePerRequestFilter {
             "/api/auth/register",
             "/api/team/create",
             "/api/team/*",
-            "/api/games/create"
+//            dps arrumar
+            "/api/games/*",
+            "/api/games/games/**",
+            "/api/games/pull-all-games-of-the-round/**",
+            "/api/predict",
+            "/api/games/find-by-all-games",
+            "/api/games/create",
+            "/api/predict",
+            "/api/user/*"
     );
 
     private final AntPathMatcher pathMatcher = new AntPathMatcher();
@@ -39,25 +49,45 @@ public class SecurityFilter  extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
 
-        String path = request.getRequestURI();
 
+        String origin = request.getHeader("Origin");
+        if (origin != null && (origin.equals("http://localhost:50619") || origin.equals("http://localhost:3000"))) {
+            response.setHeader("Access-Control-Allow-Origin", origin);
+            response.setHeader("Access-Control-Allow-Credentials", "true");
+            response.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD");
+            response.setHeader("Access-Control-Allow-Headers", "*");
+            response.setHeader("Access-Control-Max-Age", "3600");
+        }
+
+        if ("OPTIONS".equalsIgnoreCase(request.getMethod())) {
+            response.setStatus(HttpServletResponse.SC_OK);
+            return;
+        }
+
+        String path = request.getRequestURI();
 
         if (isPublicPath(path)) {
             filterChain.doFilter(request, response);
             return;
         }
 
-        var token = this.recoverToken(request);
-        var login = tokenService.validateToken(token);
+        String token = recoverToken(request);
 
-        if (login != null) {
-            User user = userRepository.findByEmail(login).orElseThrow(() -> new RuntimeException("User Not Found"));
-            var authorities = Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"));
-            var authentication = new UsernamePasswordAuthenticationToken(user, null, authorities);
-            SecurityContextHolder.getContext().setAuthentication(authentication);
+        if (token != null) {
+            String login = tokenService.validateToken(token);
+
+            if (login != null) {
+                User user = userRepository.findByEmail(login)
+                        .orElseThrow(() -> new RuntimeException("User Not Found"));
+                var authorities = Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"));
+                var authentication = new UsernamePasswordAuthenticationToken(user, null, authorities);
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+            }
         }
+
         filterChain.doFilter(request, response);
     }
+
     private boolean isPublicPath(String path) {
         return PUBLIC_PATHS.stream().anyMatch(publicPath -> pathMatcher.match(publicPath, path));
     }

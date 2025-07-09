@@ -5,6 +5,46 @@ import '../models/response_dto.dart';
 import 'package:flutter/foundation.dart';
 
 class AuthService with ChangeNotifier {
+
+  Future<void> updateProfileName(String newName) async {
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('token');
+    final userId = prefs.getString('userId');
+    if (token == null || userId == null) throw Exception('Usuário não autenticado');
+    final response = await http.put(
+      Uri.parse('$baseUrl/user/$userId'),
+      headers: {
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json',
+      },
+      body: jsonEncode({"name": newName}),
+    );
+    if (response.statusCode == 200) {
+      await prefs.setString('name', newName);
+      notifyListeners();
+    } else {
+      throw Exception('Erro ao atualizar nome');
+    }
+  }
+
+  Future<void> deleteAccount() async {
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('token');
+    final userId = prefs.getString('userId');
+    if (token == null || userId == null) throw Exception('Usuário não autenticado');
+    final response = await http.delete(
+      Uri.parse('$baseUrl/user/$userId'),
+      headers: {
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json',
+      },
+    );
+    if (response.statusCode == 200) {
+      await logout();
+    } else {
+      throw Exception('Erro ao excluir conta');
+    }
+  }
   static const String baseUrl = "http://localhost:6969/api";
 
   Future<ResponseDTO> login(String email, String password) async {
@@ -15,7 +55,8 @@ class AuthService with ChangeNotifier {
     );
 
     if (response.statusCode == 200) {
-      final data = ResponseDTO.fromJson(jsonDecode(response.body));
+      final jsonResp = jsonDecode(response.body);
+      final data = ResponseDTO.fromJson(jsonResp);
       await _saveUserData(data);
       return data;
     } else {
@@ -55,14 +96,18 @@ class AuthService with ChangeNotifier {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString('token', data.token);
     await prefs.setString('name', data.name);
+    await prefs.setString('userId', data.id);
   }
 
   Future<Map<String, String>> getCurrentUser() async {
     final prefs = await SharedPreferences.getInstance();
     final token = prefs.getString('token');
     final name = prefs.getString('name');
+    final userId = prefs.getString('userId');
 
-    if (token != null && name != null) {
+    if (token != null && name != null && userId != null) {
+      return {'name': name, 'token': token, 'userId': userId};
+    } else if (token != null && name != null) {
       return {'name': name, 'token': token};
     }
     return {};
