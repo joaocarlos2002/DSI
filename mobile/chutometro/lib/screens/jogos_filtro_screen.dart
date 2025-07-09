@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
@@ -60,11 +61,11 @@ class _JogosFiltroScreenState extends State<JogosFiltroScreen> {
         Uri.parse('http://localhost:6969/api/games/find-by-all-games'),
         headers: {
           'Authorization': 'Bearer $token',
-          'Content-Type': 'application/json',
+          'Content-Type': 'application/json; charset=utf-8',
         },
       );
       if (response.statusCode == 200) {
-        final List<dynamic> data = jsonDecode(response.body);
+        final List<dynamic> data = jsonDecode(utf8.decode(response.bodyBytes));
         setState(() {
           jogos = data.cast<Map<String, dynamic>>().reversed.take(10000).toList();
           jogosFiltrados = List.from(jogos);

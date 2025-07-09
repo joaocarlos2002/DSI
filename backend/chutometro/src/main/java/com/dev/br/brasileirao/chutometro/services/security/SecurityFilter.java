@@ -51,7 +51,7 @@ public class SecurityFilter extends OncePerRequestFilter {
 
 
         String origin = request.getHeader("Origin");
-        if (origin != null && (origin.equals("http://localhost:50619") || origin.equals("http://localhost:3000"))) {
+        if (origin != null && origin.startsWith("http://localhost:")) {
             response.setHeader("Access-Control-Allow-Origin", origin);
             response.setHeader("Access-Control-Allow-Credentials", "true");
             response.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD");
